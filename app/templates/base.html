@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ACME University</title>
+</head>
+<body>
+  <header>
+    <h1>ACME University</h1>
+    {% if current_user.is_authenticated %}
+      <form method="post" action="{{ url_for('logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit">Sign out</button>
+      </form>
+    {% endif %}
+  </header>
+  {% for category, message in get_flashed_messages(with_categories=true) %}
+    <p role="alert">{{ message }}</p>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</body>
+</html>

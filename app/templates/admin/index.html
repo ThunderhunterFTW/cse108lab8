@@ -1,0 +1,9 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+  <h1>Administration</h1>
+  <p>Manage users, courses, and enrollments using the menu above.</p>
+  <form method="post" action="{{ url_for('logout') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit">Sign out</button>
+  </form>
+{% endblock %}
