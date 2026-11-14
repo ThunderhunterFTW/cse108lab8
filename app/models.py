@@ -9,6 +9,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), nullable=False)
     display_name = db.Column(db.String(120), nullable=False)
+    enrollments = db.relationship("Enrollment", back_populates="student", passive_deletes="all")
 
     __table_args__ = (
         db.CheckConstraint("role IN ('student', 'teacher', 'admin')", name="valid_user_role"),
@@ -27,6 +28,14 @@ class Course(db.Model):
     teacher = db.relationship("User", foreign_keys=[teacher_id])
     enrollments = db.relationship("Enrollment", back_populates="course", passive_deletes="all")
 
+    @property
+    def enrolled_count(self):
+        return len(self.enrollments)
+
+    @property
+    def is_full(self):
+        return self.enrolled_count >= self.capacity
+
     __table_args__ = (db.CheckConstraint("capacity >= 0", name="nonnegative_capacity"),)
 
     def __str__(self):
@@ -38,7 +47,7 @@ class Enrollment(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="RESTRICT"), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey("course.id", ondelete="RESTRICT"), nullable=False)
     grade = db.Column(db.Integer, nullable=True)
-    student = db.relationship("User", foreign_keys=[student_id])
+    student = db.relationship("User", foreign_keys=[student_id], back_populates="enrollments")
     course = db.relationship("Course", back_populates="enrollments")
 
     __table_args__ = (

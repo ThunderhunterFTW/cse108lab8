@@ -42,10 +42,13 @@ def create_app(test_config=None):
     csrf.init_app(app)
 
     from .admin import setup_admin
+    from .student import bp as student_bp
+    app.register_blueprint(student_bp)
     from .models import User
     from .seed import seed_demo
 
     setup_admin(app)
+    
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -56,6 +59,8 @@ def create_app(test_config=None):
     def index():
         if current_user.role == "admin":
             return redirect(url_for("admin.index"))
+        if current_user.role == "student":
+            return redirect(url_for("student.student_dashboard"))
         return render_template("home.html")
 
     @app.route("/login", methods=["GET", "POST"])
