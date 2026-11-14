@@ -10,7 +10,7 @@
 <body>
   <header>
     <h1>ACME University</h1>
-    {% if current_user.is_authenticated %}<span>Welcome {{ current_user.display_name }} </span>{ % else %}<span></span>{% endif %}
+    {% if current_user.is_authenticated %}<span>Welcome {{ current_user.display_name }} </span>{% else %}<span></span>{% endif %}
       <form method="post" action="{{ url_for('logout') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit">Sign out</button>

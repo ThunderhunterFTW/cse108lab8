@@ -7,7 +7,7 @@ def role_required(role):
     def decorator(view):
         @wraps(view)
         def wrapped(*args, **kwargs):
-            if not current_user.is_authenticated:
+            if not current_app.is_authenticated:
                 return current_user.login_manager.unauthorized()
             if current_user.role != role:
                 abort(403)  # Forbidden access

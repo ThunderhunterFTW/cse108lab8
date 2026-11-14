@@ -3,7 +3,7 @@ from flask_login import current_user
 from sqlalchemy import func, insert, literal, select
 
 from . import db
-from.auth import role_required
+from .auth import role_required
 from .models import Course, Enrollment
 
 bp = Blueprint('student', __name__)
@@ -13,6 +13,7 @@ def course_json(course, my_course_ids):
         "id": course.id,
         "name": course.name,
         "teacher": course.teacher.display_name,
+        "time": course.time,
         "enrolled": course.enrolled_count,
         "capacity": course.capacity,
         "full": course.is_full,
@@ -26,14 +27,14 @@ def my_course_ids():
 @bp.get("/student")
 @role_required("student")
 def student_dashboard():
-    return render_template("student_dashboard.html")
+    return render_template("student.html")
 
 @bp.get("/api/my-courses")
 @role_required("student")
 def my_courses():
     # Gets the courses that the current user is enrolled in
     ids = my_course_ids()
-    courses = db.session.scalars(db.select(Course).order_by(Course.name)).all()
+    courses = db.session.scalars(db.select(Course).where(Course.id.in_(ids)).order_by(Course.name)).all()    
     return jsonify([course_json(c, ids) for c in courses])
 
 @bp.get("/api/courses")
@@ -57,12 +58,12 @@ def enroll(course_id):
     db.session.commit()
     if result.rowcount == 0:
         return jsonify({"error": "Course is full"}), 409
-    return jsonify(message="Enrolled successfully"), 200
+    return jsonify(message="Enrolled successfully"), 201
 
 @bp.delete("/api/enroll/<int:course_id>")
 @role_required("student")
 def drop(course_id):
-    result = result = db.session.execute(db.delete(Enrollment).where(Enrollment.student_id == current_user.id, Enrollment.course_id == course_id))
+    result = db.session.execute(db.delete(Enrollment).where(Enrollment.student_id == current_user.id, Enrollment.course_id == course_id))
     db.session.commit()
     if result.rowcount == 0:
         return jsonify({"error": "Not enrolled in this course"}), 404

@@ -5,8 +5,8 @@ const message = document.getElementById('message');
 const tabs = { mine: document.getElementById('mine'), all: document.getElementById('all') };
 let view = 'mine';
 
-async function fetchStudents() {
-    const response = await fetch(url, { method, headers: { 'X-CSRF-Token': csrf } });
+async function api(url, method = "GET") {
+    const response = await fetch(url, { method, headers: { 'X-CSRFToken': csrf } });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
         throw new Error(data.message || 'Failed to fetch students');
@@ -53,14 +53,14 @@ async function render(clearMessage = true){
         cell(row, c.name);
         cell(row, c.teacher);
         cell(row, c.time);
-        cell(row, '${c.enrolled}/${c.capacity}');
+        cell(row, `${c.enrolled}/${c.capacity}`);
         const action = cell(row, "");
         const btn = document.createElement("button");
         if (c.enrolled_in) {
             btn.textContent = "Drop";
             btn.onclick = () => act('DELETE', c);
         } else if (c.full) {
-            btn.texContent = "Full";
+            btn.textContent = "Full";
             btn.disabled = true;
         } else {
             btn.textContent = "add";
