@@ -26,7 +26,7 @@ def my_course_ids():
 
 @bp.get("/student")
 @role_required("student")
-def student_dashboard():
+def dashboard():
     return render_template("student.html")
 
 @bp.get("/api/my-courses")

@@ -2,14 +2,14 @@ const csrf = document.querySelector('meta[name="csrf-token"]').content;
 const thead = document.getElementById('thead');
 const tbody = document.getElementById('tbody');
 const message = document.getElementById('message');
-const tabs = { mine: document.getElementById('mine'), all: document.getElementById('all') };
+const tabs = { mine: document.getElementById('tab-mine'), all: document.getElementById('tab-all') };
 let view = 'mine';
 
 async function api(url, method = "GET") {
     const response = await fetch(url, { method, headers: { 'X-CSRFToken': csrf } });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch students');
+        throw new Error(data.error || 'Failed to fetch students');
     }
     return data;
 }
@@ -24,7 +24,7 @@ function cell(row, text){
 async function act(method, course){
     try {
         await api(`/api/enroll/${course.id}`,method);
-        message.textContent = method === "POST" ? 'Enrolled in ${course.name}' : 'Unenrolled from ${course.name}';
+        message.textContent = method === "POST" ? `Enrolled in ${course.name}` : `Unenrolled from ${course.name}`;
     } catch (err) {
         message.textContent = err.message;
     }
@@ -63,7 +63,7 @@ async function render(clearMessage = true){
             btn.textContent = "Full";
             btn.disabled = true;
         } else {
-            btn.textContent = "add";
+            btn.textContent = "Add";
             btn.onclick = () => act("POST", c);
         }
         action.appendChild(btn);
