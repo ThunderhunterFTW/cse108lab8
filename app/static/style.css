@@ -1,0 +1,9 @@
+
+body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 1rem; }
+header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; }
+.tabs button { padding: .5rem 1rem; border: 1px solid #999; background: #eee; cursor: pointer; }
+.tabs button.active { background: #333; color: #fff; }
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { border: 1px solid #ccc; padding: .5rem; text-align: left; }
+[role="alert"] { color: #b00020; }
+ 

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<nav class="tabs">
+  <button id="tab-mine" class="active">Your Courses</button>
+  <button id="tab-all">Add Courses</button>
+</nav>
+<p id="message" role="status"></p>
+<table>
+  <thead id="thead"></thead>
+  <tbody id="tbody"></tbody>
+</table>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='student.js') }}"></script>{% endblock %}
+ 
