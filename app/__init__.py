@@ -43,7 +43,9 @@ def create_app(test_config=None):
 
     from .admin import setup_admin
     from .student import bp as student_bp
+    from .teacher import bp as teacher_bp
     app.register_blueprint(student_bp)
+    app.register_blueprint(teacher_bp)
     from .models import User
     from .seed import seed_demo
 
@@ -60,6 +62,8 @@ def create_app(test_config=None):
             return redirect(url_for("admin.index"))
         if current_user.role == "student":
             return redirect(url_for("student.dashboard"))
+        if current_user.role == "teacher":
+            return redirect(url_for("teacher.dashboard"))
         return render_template("home.html")
 
     @app.route("/login", methods=["GET", "POST"])
