@@ -1,13 +1,7 @@
-{% extends "base.html" %}
-{% block content %}
-<nav class="tabs">
-  <button id="tab-back" class="active">Your Courses</button>
-</nav>
-<h2 id="title">Your Courses</h2>
-<p id="message" role="status"></p>
-<table>
-  <thead id="thead"></thead>
-  <tbody id="tbody"></tbody>
-</table>
-{% endblock %}
-{% block scripts %}<script src="{{ url_for('static', filename='teacher.js') }}"></script>{% endblock %}
+body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 1rem; }
+header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; }
+.tabs button { padding: .5rem 1rem; border: 1px solid #999; background: #eee; cursor: pointer; }
+.tabs button.active { background: #333; color: #fff; }
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { border: 1px solid #ccc; padding: .5rem; text-align: left; }
+[role="alert"] { color: #b00020; }
